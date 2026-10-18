@@ -98,3 +98,7 @@ id 稳定且唯一；revision 变更时保留历史；uri 为相对路径，不�
 现有运行代码支持湿地PNG与程序绘图；GLB、WebP、动画clip和图集读取尚未实现。本规范声明的是v0.5拟支持接口。首批推荐PNG+简单GLB，不用DRACO/KTX2等额外解码依赖。单个普通植株目标≤1000三角形、单GLB≤1MiB、单贴图压缩≤1MiB；地形/大型资产另列预算，不能每个对象都占满场景预算。图集≤2048²且提供1024²手机版。未实测。
 
 交付manifest添加 specVersion、assetRevision、sourceAppVersion、exportSettings；文件修改递增revision、不复用旧摘要；单位/枢轴变化属于破坏性接口变更，先提交 Work A 和主设计确认。导出前应用单位缩放，记录包围盒、材质/贴图数量和各clip持续时间。
+
+## V1.1执行进展
+
+核心循环已使用程序几何占位：seed/sprout/grow/mature状态、果实资源和自主搬运。正式美术/独立音频资产未新增；Work C原稿和清单保留。事件新增resource.produced用于真实产果，默认不新增提示音；resource.picked_up用于实际领取。接口数值仍待审核，不能据此要求批量制作。

@@ -1,0 +1,33 @@
+{
+  "entry": [
+    "BetweenAllThings/index.html"
+  ],
+  "externalSrcHref": false,
+  "cssUrls": [
+    "\"data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.6' filter='url(%23n"
+  ],
+  "networkApiPatternsFound": false,
+  "moduleImportsRemaining": false,
+  "embeddedWetlandMatches": true,
+  "materials": [
+    {
+      "file": "cover-600x900.png",
+      "width": 600,
+      "height": 900,
+      "bytes": 970379
+    },
+    {
+      "file": "cover-460x215.png",
+      "width": 460,
+      "height": 215,
+      "bytes": 192784
+    },
+    {
+      "file": "icon-512.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 24730
+    }
+  ],
+  "limitations": "Static inspection only; browser decode, sound unlock, storage, platform parsing and offline runtime remain unverified."
+}

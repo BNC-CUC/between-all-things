@@ -98,3 +98,7 @@ setBusGain(bus,value) 接受有限数0..1并夹取，20ms平滑；setMuted 独�
 运行编码建议短声MP3 128kbps单声道，环境/音乐MP3 160kbps立体声；48kHz母版保持不变。短声单文件≤256KiB、长层≤2MiB；首屏音频≤2MiB，完整运行音频≤8MiB。无缝循环若压缩接缝无法处理才交WAV，并重新核算包体。loopStart/loopEnd 秒数以及原始采样点、sampleRate一起登记，解码后校验边界。所有音源从 assets/audio/runtime/ 加载，母版在 delivery/audio/<batch-id>/masters/，不进入首屏包。文件名小写ASCII下划线，内容ID沿用 C 的 FX/AMB 编号并在 manifest映射稳定 runtime id。
 
 每个实体只能产生世界事实，不能创建 AudioNode；唯一 AudioManager 完成筛选、聚合、冷却、声部抢占、总线和节点回收。v0.5 适配启用后关闭对应旧合成事件；旧 v0.4.1 文件保持原状。正式制作前仍需主设计批准预算与范围。
+
+## V1.1执行进展
+
+核心循环已使用程序几何占位：seed/sprout/grow/mature状态、果实资源和自主搬运。正式美术/独立音频资产未新增；Work C原稿和清单保留。事件新增resource.produced用于真实产果，默认不新增提示音；resource.picked_up用于实际领取。接口数值仍待审核，不能据此要求批量制作。
