@@ -21,3 +21,6 @@ backups/
 *.tar.gz
 # Local authoring exports and tooling
 .local-tools/
+
+# v0.5 generated outputs; legacy dist remains tracked
+v0.5/build/

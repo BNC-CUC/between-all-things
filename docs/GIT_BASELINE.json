@@ -1,0 +1,11 @@
+{
+  "main": "ac96425aba68641063a293b6b28889c753fd78c8",
+  "v041TagCommit": "87e3ffb62e79ab47b923e6db0a08ae1675c1f83f",
+  "v041SourceFiles": 26,
+  "v041SourceBlobMatches": true,
+  "scanFiles": 57,
+  "credentialPatternHits": 0,
+  "scanLimits": "Pattern scan only, not proof of absence of every secret",
+  "identity": "Repository-local automation identity Work A <work-a@localhost>",
+  "remote": null
+}

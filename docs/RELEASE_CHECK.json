@@ -33,5 +33,10 @@
   "jsSyntax": "passed",
   "externalHtmlSrcHref": [],
   "gameplayTested": false,
-  "submissionStatus": "unverified"
+  "submissionStatus": "unverified",
+  "isolatedBuild": {
+    "passed": true,
+    "directory": "/var/folders/4q/4yzpgpx95vnfk6v4mwpryp300000gn/T/between-all-things-build-_z30lsz2/v041",
+    "method": "node tools/package.mjs; text packaging only; no game code executed"
+  }
 }

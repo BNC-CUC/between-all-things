@@ -1,6 +1,6 @@
 # 《万物之间》v0.5｜音频接口规范
 
-版本：draft-1 · 2026-10-18。
+版本：draft-2 · 2026-10-18。
 
 本地共享权威路径：`/Users/cornelius-lowell-winthrop/Documents/GameJam/emergent-life/docs/AUDIO_SPEC.md`。Work A 维护；此文件为审核草案，尚非批准后的生产规范。ChatGPT 项目文件同步：未完成，本地修改不会自动同步。
 
@@ -28,19 +28,19 @@ v0.4.1 以振荡器和噪声合成，声音事件直连主输出，持续和弦�
 | --- | --- | --- | ---: | ---: |
 | ui.confirm | UI | 0.10秒/全局 | 1 | 90 |
 | command.rejected | UI | 1秒/全局 | 1 | 85 |
-| seed.placed | Action | 0.30秒/工具 | 2 | 80 |
+| seed.placed | Action | 0.50秒/工具 | 2 | 80 |
 | environment.changed | Action | 0.50秒/工具 | 1 | 75 |
 | resource.placed | Action | 0.30秒/工具 | 2 | 80 |
 | plant.germinated | Nature | 6秒/邻近区域 | 1 | 35 |
 | plant.stage_changed | Nature | 8秒/邻近区域 | 1 | 30 |
-| resource.transferred | Nature | 4秒/邻近区域 | 1 | 30 |
+| resource.transferred | Nature | 6秒/邻近区域 | 1 | 30 |
 | ecology.cluster_changed | Nature | 12秒/全局 | 1 | 40 |
 | ambience.region | Ambience | 同 loopKey 不重复 | 2 | 10 |
 | music.layer | Music | 状态变化时平滑切换 | 2 | 5 |
 
-command.accepted 是通用状态事件：若已有 seed.placed 等具体动作声，不额外播放第二声。植物阶段仅对选定关键阶段考虑发声；全体自然一次性声音总计最多 2 次/秒，群体变化按区域时间窗合并，声量不随个体数无限增加。ecology.cluster_changed 的指标/阈值待主设计定义，当前不得定时伪造。
+command.accepted 是通用状态事件：若已有 seed.placed 等具体动作声，不额外播放第二声。植物阶段仅对选定关键阶段考虑发声；全体自然一次性声音总计最多每 2 秒 1 次，群体变化按区域时间窗合并，声量不随个体数无限增加。ecology.cluster_changed 的指标/阈值待主设计定义，当前不得定时伪造。
 
-全局最大 12 个逻辑声部；总线同时上限 UI 2、Action 3、Nature 3、Ambience 2、Music 2。一个复合音效作为一个逻辑声部管理其所有节点，尾音/交叉淡化也计入预算。满额时同总线先淘汰更低优先级、较远/较弱声部；同优先级可丢弃新请求。淘汰短淡出，禁止堆积等待播放。UI/Action 可抢占低优先级 Nature；不得因此突破全局 12。高优先级动作无法播放时由视觉反馈兜底。
+全局最大 8 个逻辑声部；UI/Action/Nature 一次性声音合计最多 4 个，其中 Nature 最多 2 个；Ambience 最多 2、Music 最多 2。一个复合音效作为一个逻辑声部管理其所有节点，尾音/交叉淡化也计入预算。满额时同总线先淘汰更低优先级、较远/较弱声部；同优先级可丢弃新请求。淘汰短淡出，禁止堆积等待播放。UI/Action 可抢占低优先级 Nature；不得因此突破全局 8。高优先级动作无法播放时由视觉反馈兜底。
 
 冷却使用单调实时时钟，暂停后丢弃过期请求；模拟时间仅用于事件归属。静音期间只更新状态，不堆积队列。相同区域边界的聚合由主工程维护稳定区域键，不能依赖摄像机像素位置。
 
@@ -71,7 +71,7 @@ UI 非空间化。世界音效从事件世界坐标取得声源位置；以观�
   }],
   "bindings": [{
     "event": "seed.placed", "assetId": "action.seed.place",
-    "priority": 80, "cooldownSec": 0.3,
+    "priority": 80, "cooldownSec": 0.5,
     "cooldownScope": "tool", "maxVoices": 2, "spatial": true
   }]
 }
@@ -82,3 +82,19 @@ UI 非空间化。世界音效从事件世界坐标取得声源位置；以观�
 ## 6. 后续接入完成条件
 
 声音解锁、总静音、后台暂停、读档去重、快速连续操作上限、旋转后的声像、离线资源解码与循环衔接，都属于尚未验证事项。需结合最终素材实际听感确认；本轮不开展自动化游戏测试。素材团队先按审核后的接口制作小批量动作/环境样本，主工程接入预算系统后再扩充，避免批量制作错误音色与过密反馈。
+
+## 7. 与 Work C 对齐补充（draft-2，待审核）
+
+已接收 AUDIO_AUDIT_v0.4.1.md、AUDIO_DIRECTION.md、AUDIO_MANIFEST.md；原稿归档并保留。差异、内容 ID 对应及设计待决项见 AUDIO_RECONCILIATION.md。当前独立音频资产 0，运行资源加载器未实现，MP3/WAV 是计划接口而非已验证格式。
+
+事件触发：seed.placed 在种子写入世界后；environment.changed 在湿度/肥力实际改变量非零后；resource.placed 在资源对象创建/合法移位提交后；plant.germinated 在种子转萌芽后；plant.stage_changed 在阶段改变后（默认只考虑 fruit）；resource.transferred 在货物从携带者扣除且接收方增加的原子操作成功后。command.rejected 只发简短拒绝提示，不发上述成功事件。聚合依据真实状态，不依赖动画时间。
+
+共同事件增加 actorKind:player|autonomous|environment、regionId、resourceKind?、destinationKind?、tracked:boolean；缺失来源默认低优先级自然事件，缺失位置不播放空间声。actionId 说明直接操作关联，不将自然后代自动认定为玩家动作。去重键 eventId；不同状态阶段保留独立事件，单次状态提交不得重复绑定通用 accepted 声。
+
+resource.transferred：直接玩家操作可走 Action（0.3秒去重），自主运输走 Nature（6秒/区域且全局2秒）；用户关注的 NPC 仍为 Nature。种子着地与萌发不能同事件双响。聚合窗口1秒，以稳定 regionId/type 分组，先距离筛选再消耗预算；延迟超过1秒丢弃，绝不积压补播。区域建议8×8地表格，属于工程分组参数不改变生态。
+
+setBusGain(bus,value) 接受有限数0..1并夹取，20ms平滑；setMuted 独立于保存的音量，取消静音恢复原值。灰盒初始 master=0.5、UI=0.5、Action=0.5、Nature=0.25、Ambience=0.2、Music=0.15，仍需主动开启；这是线性增益起点，不是听感保证。音乐常态1轨、交接2轨；环境常态/交接最多2层，4～8秒平滑，不能借交接绕过总预算。动作优先时环境/音乐轻退2dB（建议），禁止逐次重启包络产生抽吸。
+
+运行编码建议短声MP3 128kbps单声道，环境/音乐MP3 160kbps立体声；48kHz母版保持不变。短声单文件≤256KiB、长层≤2MiB；首屏音频≤2MiB，完整运行音频≤8MiB。无缝循环若压缩接缝无法处理才交WAV，并重新核算包体。loopStart/loopEnd 秒数以及原始采样点、sampleRate一起登记，解码后校验边界。所有音源从 assets/audio/runtime/ 加载，母版在 delivery/audio/<batch-id>/masters/，不进入首屏包。文件名小写ASCII下划线，内容ID沿用 C 的 FX/AMB 编号并在 manifest映射稳定 runtime id。
+
+每个实体只能产生世界事实，不能创建 AudioNode；唯一 AudioManager 完成筛选、聚合、冷却、声部抢占、总线和节点回收。v0.5 适配启用后关闭对应旧合成事件；旧 v0.4.1 文件保持原状。正式制作前仍需主设计批准预算与范围。
