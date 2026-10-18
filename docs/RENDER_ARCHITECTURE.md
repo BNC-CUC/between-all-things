@@ -71,3 +71,9 @@ Command={commandId,type,worldPosition,params,issuedAtTick}；校验失败无副�
 ## V1.1 实施更新
 
 v0.5/src/world.mjs新增统一生态状态、工具命令、固定步模拟与四邻域地表寻路；src/main.mjs仅消费植物/资源/搬运者状态创建占位表现。原空间灰盒在Git提交8cc4635保留。该轮没有移植整个旧world.js：旧网格/角色/事件耦合较强，首条已授权循环以独立小模块实现，复用既定局部规则思路；后续旧生态模块仍按需逐项迁移，不宣称原代码已完整复用。活动强度只供显示，还未影响路径成本。
+
+## V2.0 模块落地
+
+terrain.mjs统一坐标/高度；rules.mjs集中可配置暂定参数；world.mjs建立状态并调度；commands.mjs处理玩家意图；environment.mjs处理水肥、生长、果实腐败与矿化；agents.mjs处理储备消耗、拾取/运输；navigation.mjs读取活动强度计算路径成本；persistence.mjs校验/恢复；main.mjs保持渲染与输入。模拟不依赖图像动画。音频层接口已定义，尚无正式资源/播放器落地。
+
+保存版本schema2记录规则和grid签名，拒绝不兼容格尺寸，不静默挪动旧物体。当前地图参数仍1米/32格；修改基础尺度需一致调整地图与存档版本，未声称支持任意尺寸热切换。旧v0.4.1保持冻结。

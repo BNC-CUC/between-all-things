@@ -1,3 +1,4 @@
+import {SAVE_KEY,serialize,restore} from './persistence.mjs';
 import * as THREE from 'three';
 import {CELL_SIZE,CELLS,ORIGIN,cellAt,vertexHeight,heightAt,createEcosystem,command,step} from './world.mjs';
 const canvas=document.querySelector('canvas'), status=document.querySelector('#status');
@@ -17,21 +18,26 @@ for(let j=0;j<CELLS;j++)for(let i=0;i<CELLS;i++){const a=j*(CELLS+1)+i,b=a+1,c=a
 const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));geometry.setIndex(indices);geometry.computeVertexNormals();
 const terrain=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:true,side:THREE.DoubleSide}));scene.add(terrain);
 const stemGeometry=new THREE.ConeGeometry(.3,1.3,5), stemMaterial=new THREE.MeshStandardMaterial({color:'#788b67',roughness:1,flatShading:true});
-const world=createEcosystem(), perspective=new THREE.PerspectiveCamera(35,1,.1,180),ortho=new THREE.OrthographicCamera(-20,20,20,-20,.1,180);
+let world=createEcosystem(),autoSaveAllowed=true;
+try{const saved=localStorage.getItem(SAVE_KEY);if(saved){world=restore(saved);status.textContent='已恢复上次河湾；离开期间没有补跑模拟。';}}catch{autoSaveAllowed=false;status.textContent='旧记录暂不可读取，已保留；当前世界可导出。';}
+const perspective=new THREE.PerspectiveCamera(35,1,.1,180),ortho=new THREE.OrthographicCamera(-20,20,20,-20,.1,180);
 const plantViews=new Map(),resourceViews=new Map(),agentViews=new Map();
 const fruitGeometry=new THREE.SphereGeometry(.17,10,6),fruitMaterial=new THREE.MeshStandardMaterial({color:'#edb449'});
 const agentGeometry=new THREE.CapsuleGeometry(.14,.3,3,6),agentMaterial=new THREE.MeshStandardMaterial({color:'#594c3e'});
 const nest=new THREE.Mesh(new THREE.CylinderGeometry(.8,1,.25,16),new THREE.MeshStandardMaterial({color:'#b08a60'}));nest.position.set(world.nest.x,world.nest.y+.1,world.nest.z);scene.add(nest);
-const activity=new THREE.InstancedMesh(new THREE.PlaneGeometry(.7,.7),new THREE.MeshBasicMaterial({color:'#bf9659',transparent:true,opacity:.5,side:THREE.DoubleSide,depthWrite:false}),CELLS*CELLS);scene.add(activity);const transform=new THREE.Object3D();
-let tool='sow',hoverCell=null;
+const activity=new THREE.InstancedMesh(new THREE.PlaneGeometry(.7,.7),new THREE.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:.5,side:THREE.DoubleSide,depthWrite:false}),CELLS*CELLS);scene.add(activity);const transform=new THREE.Object3D();
+let tool='sow',hoverCell=null,overlay='activity';
 function syncWorld(){
+ const livingPlants=new Set(world.plants.map(p=>p.id));for(const [id,mesh]of plantViews)if(!livingPlants.has(id)){scene.remove(mesh);mesh.material.dispose();plantViews.delete(id);}
+ const livingAgents=new Set(world.agents.map(a=>a.id));for(const [id,mesh]of agentViews)if(!livingAgents.has(id)){scene.remove(mesh);agentViews.delete(id);}
+
  for(const p of world.plants){let mesh=plantViews.get(p.id);if(!mesh){mesh=new THREE.Mesh(stemGeometry,stemMaterial.clone());scene.add(mesh);plantViews.set(p.id,mesh);}const size=.12+p.growth*.88;mesh.scale.setScalar(size);mesh.position.set(p.position.x,p.position.y+.65*size,p.position.z);mesh.material.color.set(p.blocked?'#a58e65':p.stage==='mature'?'#698753':'#91a96e');}
- const live=new Set(world.resources.map(r=>r.id));for(const [id,mesh]of resourceViews)if(!live.has(id)){scene.remove(mesh);resourceViews.delete(id);}
- for(const r of world.resources){let mesh=resourceViews.get(r.id);if(!mesh){mesh=new THREE.Mesh(fruitGeometry,fruitMaterial);scene.add(mesh);resourceViews.set(r.id,mesh);}mesh.position.set(r.position.x+.22,r.position.y+(r.carrierId?.5:.16),r.position.z);mesh.scale.setScalar(r.id===world.selectedResourceId?1.7:1);}
+ const live=new Set(world.resources.map(r=>r.id));for(const [id,mesh]of resourceViews)if(!live.has(id)){scene.remove(mesh);mesh.material.dispose();resourceViews.delete(id);}
+ for(const r of world.resources){let mesh=resourceViews.get(r.id);if(!mesh){mesh=new THREE.Mesh(fruitGeometry,fruitMaterial.clone());scene.add(mesh);resourceViews.set(r.id,mesh);}mesh.material.color.copy(new THREE.Color('#edb449').lerp(new THREE.Color('#795846'),Math.min(1,r.age/world.rules.fruitDecaySeconds)));mesh.position.set(r.position.x+.22,r.position.y+(r.carrierId?.5:.16),r.position.z);mesh.scale.setScalar(r.id===world.selectedResourceId?1.7:1);}
  for(const a of world.agents){let mesh=agentViews.get(a.id);if(!mesh){mesh=new THREE.Mesh(agentGeometry,agentMaterial);mesh.rotation.x=Math.PI/2;scene.add(mesh);agentViews.set(a.id,mesh);}mesh.position.set(a.position.x,a.position.y+.18,a.position.z);}
- for(const c of world.cells){transform.position.set(c.x,c.y+.025,c.z);transform.rotation.set(-Math.PI/2,0,0);transform.scale.setScalar(c.activity);transform.updateMatrix();activity.setMatrixAt(c.id,transform.matrix);}activity.instanceMatrix.needsUpdate=true;
- document.querySelector('#counts').textContent=`种植 ${world.plants.length} · 成熟 ${world.plants.filter(p=>p.stage==='mature').length} · 地面果实 ${world.resources.filter(r=>!r.carrierId).length} · 已运回 ${world.delivered}`;
- if(hoverCell){const c=world.cells[hoverCell.id];document.querySelector('#land').textContent=`土地 ${c.id} · 水分 ${Math.round(c.moisture*100)}% · 肥力 ${Math.round(c.fertility*100)}%${c.surfaceType==='water'?' · 水面':''}`;}
+ for(const c of world.cells){transform.position.set(c.x,c.y+.025,c.z);transform.rotation.set(-Math.PI/2,0,0);transform.scale.setScalar(overlay==='activity'?c.activity:c.surfaceType==='soil'?.9:0);transform.updateMatrix();activity.setMatrixAt(c.id,transform.matrix);activity.setColorAt(c.id,new THREE.Color(overlay==='activity'?'#bf9659':overlay==='moisture'?'#689da3':'#86a46c').multiplyScalar(overlay==='activity'?1:.35+c[overlay]*.65));}activity.instanceMatrix.needsUpdate=true;if(activity.instanceColor)activity.instanceColor.needsUpdate=true;
+ document.querySelector('#counts').textContent=`种植 ${world.plants.length} · 成熟 ${world.plants.filter(p=>p.stage==='mature').length} · 地面果实 ${world.resources.filter(r=>!r.carrierId).length} · 巢内食物 ${world.nest.food.toFixed(1)} · 已回肥 ${world.rotted}`;
+ if(hoverCell){const c=world.cells[hoverCell.id];document.querySelector('#land').textContent=`土地 ${c.id} · 水分 ${Math.round(c.moisture*100)}% · 肥力 ${Math.round(c.fertility*100)}% · 有机物 ${c.organic.toFixed(2)} · 路径 ${Math.round(c.activity*100)}%${c.surfaceType==='water'?' · 水面':''}`;}
 }
 let camera=perspective, yaw=.65,elevation=.7,distance=42,mode='orbit',experimental=false;
 const target=new THREE.Vector3(0,0,0),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
@@ -67,9 +73,18 @@ function setMode(value){mode=value;hover.visible=false;updateCamera();status.tex
 document.querySelector('#orbit').onclick=()=>setMode('orbit');document.querySelector('#top').onclick=()=>setMode('top');document.querySelector('#bottom').onclick=()=>setMode('bottom');
 document.querySelector('#reset').onclick=()=>{target.set(0,0,0);yaw=.65;elevation=.7;distance=42;setMode('orbit');};
 document.querySelector('#experimental').onchange=e=>{experimental=e.target.checked;document.querySelector('#bottom').hidden=!experimental;if(!experimental){elevation=THREE.MathUtils.clamp(elevation,25*Math.PI/180,75*Math.PI/180);if(mode==='bottom')mode='orbit';}updateCamera();};
-canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();status.textContent='图形上下文已丢失，请刷新灰盒；当前世界未保存。';});
+canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();status.textContent='图形上下文已丢失，请刷新灰盒；请用已保存的世界记录恢复。';});
+document.querySelector('#overlay').onchange=e=>{overlay=e.target.value;};
+document.querySelector('#previous-world').onclick=()=>{try{const keys=Object.keys(localStorage).filter(k=>k.startsWith(SAVE_KEY+'.previous.')).sort((a,b)=>Number(b.split('.').at(-1))-Number(a.split('.').at(-1)));let candidate=null;for(const key of keys){try{candidate=restore(localStorage.getItem(key));break;}catch{}}if(!candidate){status.textContent='没有可恢复的上一世界记录';return;}world=candidate;world.paused=true;autoSaveAllowed=false;document.querySelector('#pause').textContent='继续生长';status.textContent='已恢复历史世界并暂停；点击保存设为当前，或导出。';syncWorld();}catch{status.textContent='历史记录暂不可访问，请用导出的文件恢复';}};
+document.querySelector('#new-world').onclick=()=>{try{localStorage.setItem(SAVE_KEY+'.previous.'+Date.now(),serialize(world));world=createEcosystem();autoSaveAllowed=true;document.querySelector('#pause').textContent='暂停世界';status.textContent='已开始相同初始条件的新实验；上一世界保留在本机历史记录。';save();}catch{status.textContent='无法保留旧世界，请先导出，未重置。';}};
 document.querySelector('#tool').onchange=e=>{tool=e.target.value;world.selectedResourceId=null;};
 document.querySelector('#pause').onclick=()=>{world.paused=!world.paused;document.querySelector('#pause').textContent=world.paused?'继续生长':'暂停世界';};
+function save(){try{if(!autoSaveAllowed)return;localStorage.setItem(SAVE_KEY,serialize(world));document.querySelector('#save-note').textContent='已保存到本机';}catch{document.querySelector('#save-note').textContent='本机保存失败，请导出记录';}}
+document.querySelector('#save').onclick=()=>{try{if(!autoSaveAllowed){const previous=localStorage.getItem(SAVE_KEY);if(previous)localStorage.setItem(SAVE_KEY+'.previous.'+Date.now(),previous);autoSaveAllowed=true;}save();status.textContent='当前世界已保存；被替换的原记录已留存。';}catch{status.textContent='无法安全保存，请先导出世界记录。';}};
+document.querySelector('#export').onclick=()=>{const blob=new Blob([serialize(world)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='riverbend-world.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+document.querySelector('#import').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>4_000_000)throw new Error('记录超过4MB');const candidate=restore(await file.text());world=candidate;world.paused=true;document.querySelector('#pause').textContent='继续生长';status.textContent='已载入并暂停；检查后继续。原本机记录尚未覆盖。';autoSaveAllowed=false;document.querySelector('#save-note').textContent='点击保存设为当前世界（会保留旧记录），或导出保留';syncWorld();}catch(error){status.textContent=error.message;}e.target.value='';};
+document.querySelector('#pause').textContent=world.paused?'继续生长':'暂停世界';
+let saveClock=0;
 let last=performance.now(),accumulator=0;
-document.addEventListener('visibilitychange',()=>{last=performance.now();accumulator=0;});
-renderer.setAnimationLoop(now=>{const elapsed=Math.min(.15,Math.max(0,(now-last)/1000));last=now;if(!document.hidden&&!world.paused){accumulator+=elapsed;while(accumulator>=1/30){step(world,1/30);accumulator-=1/30;}}else accumulator=0;syncWorld();renderer.render(scene,camera);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save();last=performance.now();accumulator=0;});addEventListener('pagehide',save);
+renderer.setAnimationLoop(now=>{const elapsed=Math.min(.15,Math.max(0,(now-last)/1000));last=now;if(!document.hidden&&!world.paused){accumulator+=elapsed;while(accumulator>=1/30){step(world,1/30);accumulator-=1/30;}}else accumulator=0;saveClock+=elapsed;if(saveClock>=10){saveClock=0;save();}syncWorld();renderer.render(scene,camera);});

@@ -1,6 +1,6 @@
 # 《万物之间》v0.5｜美术与渲染接口规范
 
-版本：draft-2 · 2026-10-18。
+版本：draft-3 · 2026-10-18。
 
 本地共享权威路径：`/Users/cornelius-lowell-winthrop/Documents/GameJam/emergent-life/docs/ART_SPEC.md`。Work A 维护；此文件为审核草案，尚非批准后的生产规范。ChatGPT 项目文件同步：未完成，本地修改不会自动同步。
 
@@ -102,3 +102,11 @@ id 稳定且唯一；revision 变更时保留历史；uri 为相对路径，不�
 ## V1.1执行进展
 
 核心循环已使用程序几何占位：seed/sprout/grow/mature状态、果实资源和自主搬运。正式美术/独立音频资产未新增；Work C原稿和清单保留。事件新增resource.produced用于真实产果，默认不新增提示音；resource.picked_up用于实际领取。接口数值仍待审核，不能据此要求批量制作。
+
+## V2.0 状态表现补充（待主设计审核）
+
+运行目前实际使用程序几何体；没有加载B区GLB/PNG新资产。PNG/GLB仍是拟正式导入格式，不能写成已接入。
+
+植物：seed/sprout/grow/mature，blocked为缺水肥停长附加状态，不以动画完成决定成熟。土地：soil/water，moisture/fertility/organic/activity连续数据；观察层读数值，常规外观不由固定剧情变色。资源：fruit含age、carrierId与position；地面新鲜→变暗→腐败移除，携带跟随真实载体；age不可由换贴图重置。动物：search/fetch/return，食物储备影响实际速度；巢显示真实food。道路强度来自activity，使用可叠加路径材质/网格，不制作预设运输路线影片。单独提示选中、非法地表与暂停。
+
+上述状态按manifest映射，同一ID/revision交付；收到文件须记录格式核对、导入和实际游戏可见三个不同阶段。当前正式新美术集成0。审批通过后再通知Work B制作；本轮不代画。

@@ -1,6 +1,6 @@
 # 《万物之间》v0.5｜音频接口规范
 
-版本：draft-2 · 2026-10-18。
+版本：draft-3 · 2026-10-18。
 
 本地共享权威路径：`/Users/cornelius-lowell-winthrop/Documents/GameJam/emergent-life/docs/AUDIO_SPEC.md`。Work A 维护；此文件为审核草案，尚非批准后的生产规范。ChatGPT 项目文件同步：未完成，本地修改不会自动同步。
 
@@ -83,7 +83,7 @@ UI 非空间化。世界音效从事件世界坐标取得声源位置；以观�
 
 声音解锁、总静音、后台暂停、读档去重、快速连续操作上限、旋转后的声像、离线资源解码与循环衔接，都属于尚未验证事项。需结合最终素材实际听感确认；本轮不开展自动化游戏测试。素材团队先按审核后的接口制作小批量动作/环境样本，主工程接入预算系统后再扩充，避免批量制作错误音色与过密反馈。
 
-## 7. 与 Work C 对齐补充（draft-2，待审核）
+## 7. 与 Work C 对齐补充（draft-3，待审核）
 
 已接收 AUDIO_AUDIT_v0.4.1.md、AUDIO_DIRECTION.md、AUDIO_MANIFEST.md；原稿归档并保留。差异、内容 ID 对应及设计待决项见 AUDIO_RECONCILIATION.md。当前独立音频资产 0，运行资源加载器未实现，MP3/WAV 是计划接口而非已验证格式。
 
@@ -102,3 +102,11 @@ setBusGain(bus,value) 接受有限数0..1并夹取，20ms平滑；setMuted 独�
 ## V1.1执行进展
 
 核心循环已使用程序几何占位：seed/sprout/grow/mature状态、果实资源和自主搬运。正式美术/独立音频资产未新增；Work C原稿和清单保留。事件新增resource.produced用于真实产果，默认不新增提示音；resource.picked_up用于实际领取。接口数值仍待审核，不能据此要求批量制作。
+
+## V2.0 声音事件与预算确认
+
+主设计已授权一次性声音上限4、自然事件启动间隔2秒作为可配置测试参数；仍待人工试听，不是最终混音验收。配置建议oneShotMax=4、natureIntervalSec=2、natureMax=2；环境常态2层独立管理，音乐独立，总量策略沿用草案。玩家Action先于普通Nature，不排队补播被舍弃的自然事件。
+
+新增resource.decayed：仅真实地面果实从资源表删除并添加organic后产生；默认静音，用环境层/视觉解释，不给每颗腐败负面警报。resource.transferred：实际载货扣除、nest.food增加后发生，NPC沿用6秒局部冷却及2秒全局限频。储备逐帧消耗、矿化、路径每步积累默认不发声；禁止把每次update当事件音。未来nest.reserve_low若设计批准，只在阈值跨越时考虑且目前未实现。
+
+母版WAV48k/24bit、运行MP3和必要短WAV、命名目录/解锁/总线规则不变。当前正式音频资产0、集中播放器未实现、未做试听；不得称为已有并发保护运行证据。Work C原稿保留在archive/work-c-20261018，清单仍由C负责。收到素材后记录格式/实际导入/试听状态，不自动将收到改为完成。
