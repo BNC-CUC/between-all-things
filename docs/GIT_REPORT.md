@@ -28,3 +28,10 @@ GitHub CLI已安装但未登录；不再要求安装CLI。用户可在GitHub网�
 git worktree add --detach ../between-all-things-v041-restore v0.4.1-pre-v0.5
 ```
 不在当前开发分支执行reset或覆盖；原发行包从已有完整恢复点取回。v0.5保留在feat/v0.5-riverbend。本轮最终文档提交号通过git log -1查看，交付回复记录。
+
+## V4.0实时核对｜2026-10-19
+用户已完成浏览器授权，gh确认BNC-CUC账户登录。GitHub API确认https://github.com/BNC-CUC/between-all-things为Private；defaultBranchRef为空，git ls-remote origin退出0且无任何refs，远端为空，无需合并已有历史。origin已配置该HTTPS地址，未覆盖任何既有远端。
+
+本轮开始HEAD98db074；工作区仅本轮docs变更。现有恢复标签保留，v0.5源码无变更。检查全部133个可达历史blob的常见私钥/GitHub/AWS/密码赋值模式，无命中；不是穷尽保证。忽略规则沿用有效，无新密钥文件加入。后续文档提交也需扫描后才请求首次推送。
+
+拟首次推送：main（共享根v0.3历史基线）、feat/v0.5-riverbend（含loop.2及本轮审计）、v0.3.0-workspace-baseline、v0.4.1-pre-v0.5。v0.4.1标签是独立源码快照，恢复包不在Git。内容包含源码、原图/SVG、许可证、依赖锁文件和协作文档（含本地绝对路径）；不含node_modules、构建输出、发行ZIP、完整恢复包。只推这四个ref，不使用--all/--mirror/--force。首次推送等待用户明确确认；授权登录不等于推送批准。推送后再核对Private及每个远端提交/标签ID。

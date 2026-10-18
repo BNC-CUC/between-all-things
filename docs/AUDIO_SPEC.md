@@ -115,3 +115,10 @@ setBusGain(bus,value) 接受有限数0..1并夹取，20ms平滑；setMuted 独�
 新增resource.decayed：仅真实地面果实从资源表删除并添加organic后产生；默认静音，用环境层/视觉解释，不给每颗腐败负面警报。resource.transferred：实际载货扣除、nest.food增加后发生，NPC沿用6秒局部冷却及2秒全局限频。储备逐帧消耗、矿化、路径每步积累默认不发声；禁止把每次update当事件音。未来nest.reserve_low若设计批准，只在阈值跨越时考虑且目前未实现。
 
 母版WAV48k/24bit、运行MP3和必要短WAV、命名目录/解锁/总线规则不变。当前正式音频资产0、集中播放器未实现、未做试听；不得称为已有并发保护运行证据。Work C原稿保留在archive/work-c-20261018，清单仍由C负责。收到素材后记录格式/实际导入/试听状态，不自动将收到改为完成。
+
+## V4.0对接核查｜2026-10-19｜Draft
+保留WAV48k/24bit母版、MP3运行及必要短WAV，Action优先，4一次性声部/自然事件2秒间隔为可配置测试值。环境loopKey、后台暂停、静音、首次手势unlock和离线加载要求不变；集中AudioManager尚未实施。
+
+实际events.mjs提供schemaVersion/eventId/type/simTime/position/entityId/actorKind/regionId/tracked/payload；草案actionId及部分资源/接收方字段并非每个现有事件已提供，未来适配应从payload规范映射，缺失不编造玩家归因。plant.stage_changed默认“fruit”表述与现有植物mature状态不一致：成熟以mature为准，产果用resource.produced且默认静音；不要求Work C为不存在的fruit植物阶段生产音效。ecology.cluster_changed仍为未实现的设计候选。
+
+接收先核对实际格式/采样率/声道/时长/循环边界/摘要/许可，再由批准后的集中播放器解码接入，最后人工试听。收到文件、解码成功和听感验收分别记录。当前0正式音频资产，不要求新批次；音量数值、环境层范围及最终混音待主设计审核。

@@ -115,3 +115,10 @@ id 稳定且唯一；revision 变更时保留历史；uri 为相对路径，不�
 植物：seed/sprout/grow/mature，blocked为缺水肥停长附加状态，不以动画完成决定成熟。土地：soil/water，moisture/fertility/organic/activity连续数据；观察层读数值，常规外观不由固定剧情变色。资源：fruit含age、carrierId与position；地面新鲜→变暗→腐败移除，携带跟随真实载体；age不可由换贴图重置。动物：search/fetch/return，食物储备影响实际速度；巢显示真实food。道路强度来自activity，使用可叠加路径材质/网格，不制作预设运输路线影片。单独提示选中、非法地表与暂停。
 
 上述状态按manifest映射，同一ID/revision交付；收到文件须记录格式核对、导入和实际游戏可见三个不同阶段。当前正式新美术集成0。审批通过后再通知Work B制作；本轮不代画。
+
+## V4.0导入对接补充｜2026-10-19｜Draft
+统一提案仍为+Y高度/+Z前向，地面中心原点、导出缩放一，1单位=1米与cellSize=1仅为可配置接口值待审。沿用PNG透明贴图、简单GLB，不新增在线解码依赖。路线未批准前不要求批量生产。
+
+接收分四步记录：①检查manifest的版本、相对路径、许可证与SHA-256；②静态核对PNG尺寸/alpha、GLB头与JSON、包围盒/节点变换/嵌入资源/动画名，拒绝绝对路径、网络URI与未支持扩展；③批准整合后本地GLTFLoader/TextureLoader加载并绑定真实实体状态；④用户人工检查侧背面、透明边缘、尺寸、拾取和状态可读性。前两步通过不等于实际导入或美术验收。
+
+当前没有正式GLB加载器/动画映射接入；GLB/PNG是目标资源接口，不冒称运行支持。seed/sprout/grow/mature以及资源age/carrierId、动物search/fetch/return来自世界状态；旧绘图输入需适配，不改变模拟。背景原画不能作为精确碰撞地形。待审：尺寸、可用俯仰、多方向/浅体选择、alpha阈值、预算与首批范围。
