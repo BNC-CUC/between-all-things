@@ -1,27 +1,30 @@
-# Git / GitHub 交付报告
-2026-10-18。
+# Git / GitHub 检查报告｜V3.0
+2026-10-18。仓库：/Users/cornelius-lowell-winthrop/Documents/GameJam/emergent-life。
 
-仓库：`/Users/cornelius-lowell-winthrop/Documents/GameJam/emergent-life`
-当前分支：`feat/v0.5-riverbend`。本轮开始前没有.git、远端、历史提交或其他Git工作树；没有覆盖现有Git历史。
+## 本地检查
+- 现有仓库沿用，未重新初始化；当前feat/v0.5-riverbend，无远端跟踪关系。
+- 本轮开始工作区干净，HEAD 1e3a2a5；c937a6a为loop.2、acce3ac为loop.1；v0.5代码完整保留，本轮仅docs改动。
+- main为ac96425（共享根实际v0.3）；v0.4.1-pre-v0.5独立根快照87e3ffb62e79ab47b923e6db0a08ae1675c1f83f。本轮26个原始文件逐字节匹配原v0.4.1目录，另有.gitignore；Git对象连通性检查通过。
+- 原完整恢复点不变：/Users/cornelius-lowell-winthrop/Documents/ChatGPT/涌现/recovery/before-v0.5-20261018-120210+0800。发行包不在Git，不能用Git代替完整备份。
+- .gitignore排除node_modules、缓存、日志、临时文件、.env、私钥、release/recovery/backups、ZIP/TAR、v0.5/build。旧dist为实际源码，保留跟踪。
+- 本轮扫描66个已跟踪文件的常见凭据模式、120个可达历史blob的私钥/GitHub/AWS模式，无命中。有限模式扫描并非无敏感信息的绝对保证；正式推送前重新检查最终提交集合。文档含本地绝对路径，不算秘密，但需知晓其会随私人仓库上传。
+- 仓库署名沿用Work A <work-a@localhost>，不伪装用户身份，不改全局设置。
 
-main初始提交：ac96425aba68641063a293b6b28889c753fd78c8（实际共享根v0.3及协作文档）。
-标签v0.3.0-workspace-baseline指向该基线。
-真实v0.4.1源码标签v0.4.1-pre-v0.5指向87e3ffb62e79ab47b923e6db0a08ae1675c1f83f，单独根提交，26个原源码/文档/素材文件逐blob核对匹配；另含.gitignore。发行包不入Git，从既有完整恢复点恢复。
+## GitHub接入验收
+| 项目 | 状态 |
+| --- | --- |
+| 实际地址及Private | 尚无地址，未核实 |
+| 本地/远端关系 | 仅本地分支，无remote/upstream |
+| 已推送并验证提交 | 无，未进行首次推送 |
+| v0.4.1恢复标签 | 本地保留并核对通过 |
+| v0.5技术成果 | 本地提交保留 |
+| 敏感与忽略检查 | 上述范围通过，推送前再核对最终集合 |
 
-本机原来未配置Git署名，因此本仓库使用明确的自动化身份 Work A <work-a@localhost>；不是用户GitHub身份，不改全局配置。后续可按用户提供署名设置，未经要求不改写既有提交。
+GitHub CLI已安装但未登录；不再要求安装CLI。用户可在GitHub网页登录，选择已有私人仓库，或新建between-all-things并选择Private；新空仓库避免预生成README/许可/gitignore以免引入无关初始历史。将仓库网页地址交给Work A即可，不发送密码/令牌。已有仓库先核对历史，不覆盖。Work A检查目标访问权限/Private状态及待推送内容后，依用户明确要求另行确认首次push。当前尚未发起首次push确认，因为目标仓库仍未确定。
 
-安全恢复v0.4.1：在仓库中运行以下命令，生成全新目录，避免覆盖当前工作树：
-
+## 安全恢复
+在主仓库中执行下列命令生成新的独立目录，目标必须不存在：
 ```sh
 git worktree add --detach ../between-all-things-v041-restore v0.4.1-pre-v0.5
 ```
-
-该目录必须尚不存在。可在其中按原README运行；要取原发行包使用恢复点restored/v0.4.1/release。标签证明源文件可恢复，不宣称人工试玩验收。
-
-GitHub：未连接，无仓库地址、无远端、未推送。GitHub CLI现已通过Homebrew安装2.102.0；auth status确认未登录。直接官方二进制下载超时后改用已安装Homebrew，未关闭证书校验。安装完成不代表账号授权完成。
-
-用户下一步可在本机终端执行 `gh auth login --hostname github.com --git-protocol https --web`，按浏览器页面完成授权；不要把密码/令牌发到聊天。授权后只创建/连接private的between-all-things；若同名仓库存在先核对，不替换历史。确定待推送文件、仓库和分支后，再依用户要求确认首次push；尚未发起该确认，因为目标账户/仓库未确定。当前不阻塞本地灰盒开发。
-
-凭据检查：本轮对候选文本执行常见GitHub/AWS/API令牌、私钥及密码赋值模式检查，无命中；扫描不是穷尽证明，首次推送前须重新检查最终待推送集合。发行ZIP、恢复包、缓存、环境配置、私钥排除；旧dist属于源码保留。文档含本地绝对路径，首次私人仓库推送说明应包含此事实。
-
-最新交付提交可由 `git log -1 --oneline` 查看；最终交付摘要另附提交号，避免把提交自身哈希写进同一提交产生循环。当前只做本地版本管理。
+不在当前开发分支执行reset或覆盖；原发行包从已有完整恢复点取回。v0.5保留在feat/v0.5-riverbend。本轮最终文档提交号通过git log -1查看，交付回复记录。
