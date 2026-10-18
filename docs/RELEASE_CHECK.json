@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-18",
+  "version": "0.4.1",
+  "source": "/Users/cornelius-lowell-winthrop/Documents/Codex/2026-10-18/referenced-chatgpt-conversation-this-is-an-2/outputs/BetweenAllThings-v0.4.1",
+  "files": [
+    {
+      "file": "万物之间-下一次生长-v0.4.1.html",
+      "sha256": "67e335d9946f4646a34873a827d49f51a6678954b5ee0b8af9871ba89f28ba4f",
+      "bytes": 4098208
+    },
+    {
+      "file": "BetweenAllThings-H5-v0.4.1.zip",
+      "sha256": "0207b1d977ad48f19e6f19c6911374adf6be9a820999b9542713dffb20295254",
+      "bytes": 3014291
+    },
+    {
+      "file": "万物之间-朋友试玩-v0.4.1.zip",
+      "sha256": "0f8b3bb6e41cbff3745295fd7588bfe5497e91cbdb5116fdd1f7841d3f5f343e",
+      "bytes": 3015549
+    },
+    {
+      "file": "BetweenAllThings-source-v0.4.1.zip",
+      "sha256": "a24f9fb1a7b94b2812c3751509e14b4328c8c96ca832d6bdfe779fcaa60bd9d9",
+      "bytes": 4203180
+    },
+    {
+      "file": "万物之间-投稿材料-v0.4.1.zip",
+      "sha256": "f28e21090f0832fb6fa8316265ebb046c994ee322de85a870c8dadd07161fb25",
+      "bytes": 4215316
+    }
+  ],
+  "zipCRC": "passed",
+  "jsSyntax": "passed",
+  "externalHtmlSrcHref": [],
+  "gameplayTested": false,
+  "submissionStatus": "unverified"
+}

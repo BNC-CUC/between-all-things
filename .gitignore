@@ -1,0 +1,23 @@
+# Dependencies, caches and operating-system files
+node_modules/
+.cache/
+.vite/
+coverage/
+.DS_Store
+*.log
+*.tmp
+*.swp
+# Credentials and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Generated releases and complete backups (dist is authored source in v0.3/v0.4)
+release/
+recovery/
+backups/
+*.zip
+*.tar.gz
+# Local authoring exports and tooling
+.local-tools/

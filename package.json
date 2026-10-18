@@ -1,0 +1,1 @@
+{"name":"emergent-life","version":"0.3.0","private":true,"type":"module","scripts":{"start":"node tools/server.mjs","package":"node tools/package.mjs"},"engines":{"node":">=20"}}

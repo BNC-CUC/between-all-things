@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b252b"><meta name="description" content="万物之间：从一粒微光，到一个彼此相连的生命世界。涌现主题的交互创作实验。">
+<title>万物之间 · 从微光开始</title>
+<link rel="icon" type="image/svg+xml" href="./icon.svg"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="world" tabindex="0" aria-label="生命涌现的互动世界。按住画面或使用方向键移动，空格参与，E使用当前生命的另一种行动。"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<header><button id="brand" aria-label="打开旅程菜单"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="3"/><circle cx="16" cy="16" r="10" fill="none"/><path d="M16 2v4m0 20v4M2 16h4m20 0h4"/></svg><span>万物之间<small>BETWEEN ALL THINGS</small></span></button><nav><span class="version">生命涌现 · 实验 03</span><button id="sound" aria-pressed="true" aria-label="声音开关">声音 开</button><button id="help" aria-label="操作说明">?</button><button id="pause" class="hidden" aria-label="暂停">Ⅱ</button></nav></header>
+<main id="landing">
+ <div class="intro"><p class="eyebrow"><i></i> 从一个微小的回应开始</p><h1>万物<br><em>之间</em></h1><p class="subtitle">BETWEEN ALL THINGS</p><p class="premise">你是一粒微光。<br>游近另一粒光，轻轻闪一下。<br><span>看看世界，怎样把这一次回应接下去。</span></p><button id="start" class="primary">成为第一粒光 <span>↗</span></button><p class="start-note">建议开启声音 · 鼠标 / 键盘 / 触屏</p></div>
+ <aside class="opening-note"><span>一粒 → 一簇 → 一片 → 一个世界</span><p>每一种生命，<br>都从身边开始。</p></aside>
+ <footer><span>微光 · 生长 · 道路 · 飞行 · 新生</span><span>一个关于「涌现」的交互实验</span></footer>
+</main>
+<section id="hud" class="hidden" aria-label="当前行动">
+ <div class="goal-panel"><p class="eyebrow"><span id="role">一粒微光</span><span id="scale-note">微观 · 贴近一个生命</span></p><h2 id="goal-title"></h2><p id="goal-hint"></p><div class="progress"><i id="goal-progress"></i></div><p id="goal-status"></p></div>
+ <aside class="causal"><p>正在发生的联系</p><div id="causal-chain"></div><span id="causal-detail"></span></aside>
+ <div id="ready-card" class="ready-card hidden"><span>这个世界，已经有了新的可能</span><button id="next"><span id="next-label"></span><b>↗</b></button><small>也可以留下，继续参与。</small></div>
+ <div class="bottom"><div id="world-history" class="world-history"><button data-stage="0"><i>◌</i><span>微光<small id="memory-0"></small></span></button><b>→</b><button data-stage="1"><i>✳</i><span>生长<small id="memory-1"></small></span></button><b>→</b><button data-stage="2"><i>⌁</i><span>道路<small id="memory-2"></small></span></button><b>→</b><button data-stage="3"><i>⌁</i><span>飞行<small id="memory-3"></small></span></button><b>↺</b></div>
+ <div class="controls"><div class="move-note"><kbd>W A S D</kbd><span id="move-note">或按住画面游动</span></div><button id="action" class="action"><span id="action-label">闪光</span><kbd>空格</kbd></button><button id="secondary" class="secondary hidden"><span id="secondary-label"></span><kbd>E</kbd></button><button id="overview" class="quiet" aria-pressed="false">看整个世界 <kbd>V</kbd></button></div></div>
+</section>
+<div id="story" class="story hidden" role="status" aria-live="polite"><span class="story-dot"></span><div><strong id="story-title"></strong><p id="story-body"></p></div></div>
+<div id="perspective" class="perspective hidden" aria-hidden="true"><span id="perspective-kicker"></span><strong id="perspective-title"></strong><p id="perspective-body"></p></div>
+<section id="ending" class="ending hidden"><p class="eyebrow">你的微小参与，留在了这里</p><h2>世界，<br>在你们之间。</h2><p id="ending-memory"></p><button id="keep-living" class="primary">留在这个世界 <span>↗</span></button><button id="restart" class="text-button">让另一段生命开始</button></section>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-card"><p class="eyebrow">万物之间</p><h2 id="modal-title">世界，暂时屏住了呼吸</h2><div id="guide"><p><b>移动</b>按住画面，或用 WASD / 方向键。每次视角变化后，金色描边的个体就是你。</p><p><b>空格 / 主按钮</b>微光会闪烁，孢子会播种，蚂蚁会留下气味，鸟会鸣叫。它们都只能直接影响附近。</p><p><b>E / 副按钮</b>生长时更换初始图案；鸟携带草籽后，在绿色萌发区落种。</p><p><b>看见回应</b>细线标出传播，金色标出正在搬运的资源。完成当前联系后，右侧会出现前往另一种生命的按钮。</p><p><b>V / 看整个世界</b>随时拉远。下方的生命印记可以回到已经经历过的视角，世界状态会保留。</p><p class="fiction-note">这是一个写意的生命世界，采用虚构的资源联系；生长图案、路径与群体运动由局部规则持续生成。</p></div><button id="resume" class="primary">继续参与 <span>↗</span></button><button id="new-world" class="text-button">重新开始这段旅程</button></div></div>
+<div id="load-error" class="hidden" role="alert">世界暂时没有醒来。请关闭后重新打开单文件试玩版。</div>
+<script type="module" src="./game.js"></script>
+</body></html>
