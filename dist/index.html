@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b252b"><meta name="screen-orientation" content="landscape"><meta name="x5-orientation" content="landscape">
+<meta name="description" content="在微光、植物、蚂蚁与飞鸟之间自由接力，让两片岸地拥有自己的下一次生长。《万物之间》涌现主题生态游戏。">
+<title>万物之间 · 下一次生长</title>
+<link rel="icon" type="image/svg+xml" href="./icon.svg"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="world" tabindex="0" aria-label="万物之间。WASD或方向键移动，空格主行动，E副行动，1至4切换生命，V回望。触屏可用左下摇杆。"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<header><button id="brand" aria-label="打开菜单"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="3"/><circle cx="16" cy="16" r="10" fill="none"/><path d="M16 2v4m0 20v4M2 16h4m20 0h4"/></svg><span>万物之间<small>BETWEEN ALL THINGS</small></span></button><nav><span id="season" class="version">下一次生长 · 0.4.1</span><button id="sound" aria-pressed="true">声音 开</button><button id="help" aria-label="操作与目标">?</button><button id="pause" class="hidden" aria-label="暂停">Ⅱ</button></nav></header>
+<main id="landing">
+ <div class="intro"><p class="eyebrow"><i></i> 2026 聚光灯 · 涌现</p><h1>万物<br><em>之间</em></h1><p class="subtitle">BETWEEN ALL THINGS</p><p class="premise">让空着的远岸，<br>拥有自己的下一次生长。<br><span>微光、孢子、蚂蚁与飞鸟，随时成为其中一个。</span></p><button id="continue" class="primary hidden">回到上次的世界 <span>↗</span></button><button id="start" class="primary">走进这个世界 <span>↗</span></button><p id="save-note" class="start-note">可离线游玩 · 建议开启声音 · 电脑 / 触屏</p></div>
+ <aside class="opening-note"><span>每一次选择，都有来处与去向</span><p>光保留湿润，<br>脚步送回养分，<br>翅膀把种子带远。</p></aside>
+ <footer><span>微光 · 生长 · 道路 · 飞行 · 新生</span><span>单人 · 本地世界 · 没有倒计时失败</span></footer>
+</main>
+<section id="hud" class="hidden" aria-label="生态世界与行动">
+ <div class="goal-panel"><p class="eyebrow"><span id="role"></span><span id="scale-note"></span></p><h2 id="goal-title"></h2><p id="goal-hint"></p><div class="progress"><i id="goal-progress"></i></div><p id="goal-status"></p><p id="local-status"></p><details class="action-feedback" open><summary>你的行动去向</summary><ul id="action-traces"></ul></details></div>
+ <aside class="causal"><p>正在发生的联系</p><div id="causal-chain"></div><span id="causal-detail"></span><span id="cargo-status"></span></aside>
+ <div id="shores" class="shores" aria-label="选择留意的岸地"><button data-garden="0"><b>近岸</b><span id="shore-0"></span></button><button data-garden="1"><b>微光湾</b><span id="shore-1"></span></button><button data-garden="2"><b>风中洲</b><span id="shore-2"></span></button></div>
+ <aside id="review" class="review hidden"><h2>世界回望</h2><div class="review-scroll"><p id="review-totals"></p><svg id="trend" viewBox="0 0 260 60" role="img" aria-label="最近的植物数量变化"></svg><small>植物数量 · 最近的世界记录</small><ol id="journal"></ol><h3>你的行动与后续回应</h3><p>谱系表示参与过；共同环境、其他亲本和同伴也参与了结果。转向回应不等同完成运输或成功萌发。</p><ul id="review-traces"></ul></div><button id="export-world" class="secondary">保存世界记录</button></aside>
+ <div class="bottom"><div id="world-history" class="world-history"><button data-stage="0"><i>◌</i><span>微光<small id="memory-0"></small></span><kbd>1</kbd></button><button data-stage="1"><i>✳</i><span>生长<small id="memory-1"></small></span><kbd>2</kbd></button><button data-stage="2"><i>⌁</i><span>道路<small id="memory-2"></small></span><kbd>3</kbd></button><button data-stage="3"><i>⌁</i><span>飞行<small id="memory-3"></small></span><kbd>4</kbd></button></div>
+ <div class="controls"><div class="move-note"><kbd>W A S D</kbd><span id="move-note"></span></div><button id="action" class="action"><span id="action-label"></span><kbd>空格</kbd></button><button id="secondary" class="secondary"><span id="secondary-label"></span><kbd>E</kbd></button><button id="overview" class="quiet" aria-pressed="false">世界回望 <kbd>V</kbd></button></div></div>
+ <div id="joystick" class="joystick" role="group" aria-label="触屏移动摇杆"><span id="stick"></span><small>移动</small></div>
+</section>
+<div id="story" class="story hidden" role="status" aria-live="polite"><span class="story-dot"></span><div><strong id="story-title"></strong><p id="story-body"></p></div></div>
+<div id="perspective" class="perspective hidden" aria-hidden="true"><span id="perspective-kicker">同一个世界，另一种生命</span><strong id="perspective-title"></strong><p id="perspective-body"></p></div>
+<section id="ending" class="ending hidden" aria-label="本次旅程的回望" role="dialog" aria-modal="true"><div class="ending-card"><p class="eyebrow">下一次生长，已经开始</p><h2>世界，<br>在你们之间。</h2><p id="ending-memory"></p><button id="keep-living" class="primary">留下，继续参与 <span>↗</span></button><button id="ending-review" class="text-button">看看来时的变化</button></div></section>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-card"><p class="eyebrow">万物之间 · 0.4.1</p><h2 id="modal-title">世界，暂时屏住了呼吸</h2><div id="guide">
+<p><b>一个愿望，几条可以选择的路</b>风中洲开场没有植被、养分只有8%。让这里至少4株植物成熟、湿度≥30%、养分≥14%，并出现至少2株本地第二代及以后后代成熟结实，最近45秒内仍有自然新生；再与近岸或微光湾共同保持生机15秒。创始植株不算本地后代，世界更新次数也不算世代。目标只看世界状态，没有亲送或操作次数要求。</p>
+<p><b>移动与切换</b>WASD / 方向键 / 按住画面；触屏也可用左下摇杆。1—4或下方按钮随时切换四种生命。V查看世界；点击岸地名称只设方向提示，不传送。金色个体是你。</p>
+<p><b>微光 · 空格闪光</b>回应沿附近邻居传播，暂时帮助附近岸地保湿。光不会制造养分。长风时更有用，暖雨时可以留手。</p>
+<p><b>生长 · 空格播种 / E 换图案</b>三种形状产生不同邻域结构。植物成熟后，在自己的位置结出有存量的食物与种子。密植会消耗养分，孢子会缓慢恢复。</p>
+<p><b>蚂蚁 · 空格留气味 / E 换任务</b>寻找食物时靠近自动拾取，回巢自动放下。一份食物形成一份待搬养分；切到送养分任务，在巢穴取出，进入任意岸地便施肥。携带时先送达再换任务。工蚁优先给已有植物的岸地补给。气味反馈只在实际转向改变后记录；没有同伴采用也会如实显示。</p>
+<p><b>飞鸟 · 空格鸣叫 / E 落种</b>始终向前飞，Shift可低飞减速。飞近植物上的金色种子便携带，可在任何地方落下。风会造成漂移，落在浅岸且持续湿润肥沃才能发芽。野鸟通常选择已有植被的异地落种；鸣叫可暂时引导附近同伴前往空岸。听见、实际转向和随后落种会分开记录，落种仍可能失败。</p>
+<p><b>留下的与失去的</b>资源被取走就会减少；食物腐败、气味消散、密植消耗与干旱都有后果。各身体的位置和携带物随视角保留。关闭或离开页面时世界暂停，修复版使用独立续玩位置，旧版存档请在原版打开。每15秒尝试保存；也可导出 / 导入世界记录。</p>
+<p class="fiction-note">这是写意的虚构生态，资源关系不代表现实生物学。湿地原画由既有 AI 资产复用，生命形态以程序绘制，声音由浏览器合成。无账户、无遥测、无广告或联网玩法。</p>
+</div><div id="save-status" role="status"></div><button id="resume" class="primary">继续参与 <span>↗</span></button><div class="save-tools"><button id="save-now" class="secondary">保存到本机</button><button id="export-save" class="secondary">导出世界记录</button><button id="import-save" class="secondary">导入世界记录</button></div><input id="import-file" type="file" accept="application/json,.json" hidden><button id="new-world" class="text-button">另起一个世界…</button><div id="restart-choice" class="hidden"><p>新世界会替换本机续玩位置。当前世界可先导出保留。</p><button id="restart" class="secondary">开始新世界</button><button id="cancel-restart" class="quiet">继续当前世界</button></div></div></div>
+<div id="orientation-note">横向拿起设备，可以更舒展地看见世界。<button id="dismiss-orientation" aria-label="关闭横屏提示">×</button></div>
+<div id="load-error" class="hidden" role="alert">世界遇到了问题。可打开菜单导出当前记录，或关闭后重新打开单文件版。</div>
+<script type="module" src="./game.js"></script>
+</body></html>

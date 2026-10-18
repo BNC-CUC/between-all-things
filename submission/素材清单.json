@@ -1,0 +1,36 @@
+{
+  "assets": [
+    {
+      "file": "dist/assets/wetland.png",
+      "bytes": 2979085,
+      "sha256": "21f97184121c7a93b15805cf718789f5d8935447aa3235a4a9d82634faffa4ac",
+      "provenance": "Existing ImageGen wetland artwork; see ART_DIRECTION.md"
+    },
+    {
+      "file": "dist/icon.svg",
+      "bytes": 402,
+      "sha256": "68dffdcdce4e3279dc2d2ab498fa05ba55b4ead16253bd6c50756208e2ac54f8",
+      "provenance": "Existing SVG brand geometry export"
+    },
+    {
+      "file": "submission/materials/cover-460x215.png",
+      "bytes": 192784,
+      "sha256": "7c96563adc477c20cee122d2e814dcae0349d268024173f236f68f00cf14f858",
+      "provenance": "Layout derived from existing ImageGen wetland artwork; not a gameplay screenshot"
+    },
+    {
+      "file": "submission/materials/cover-600x900.png",
+      "bytes": 970379,
+      "sha256": "bbbfdffe2b44390a509fa001cb5101a3a7eb5a99202840c2b9c394c3693ef2b2",
+      "provenance": "Layout derived from existing ImageGen wetland artwork; not a gameplay screenshot"
+    },
+    {
+      "file": "submission/materials/icon-512.png",
+      "bytes": 24730,
+      "sha256": "0a3bcef15ce2eed9a9925dae7a9ae65c69fef9ccf1e774e1d9d99fbfd286bb73",
+      "provenance": "Existing SVG brand geometry export"
+    }
+  ],
+  "new_ai_generation": false,
+  "visual_qa_performed": false
+}
